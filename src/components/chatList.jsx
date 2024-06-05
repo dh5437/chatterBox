@@ -13,14 +13,26 @@ const ChatList = () => {
   });
   console.log(chats);
 
+  const sendMessage = location.state.sendMessage;
+
   return (
     <div>
       <h1>Room: {roomname}</h1>
-      <ul>
-        {chats.map((chat) => (
-          <Chat key={chat.id} data={chat} />
-        ))}
-      </ul>
+      <div style={{ maxHeight: "600px" }}>
+        <div>
+          {chats.map((chat) => (
+            <Chat key={chat.id} data={chat} />
+          ))}
+        </div>
+      </div>
+      <form>
+        <input
+          className="form-control"
+          type="text"
+          // onChange={sendMessage}
+        ></input>
+        <button>Send</button>
+      </form>
     </div>
   );
 };
