@@ -8,15 +8,19 @@ import { Outlet } from "react-router-dom";
 
 function App() {
   const [datas, setDatas] = useState([]);
+  const [room, setRoom] = useState();
 
   useEffect(() => {
     axios
       .get("https://www.yungooso.com/api/messages")
-      .then(({ data }) => setDatas(data))
+      .then(({ data }) => {
+        setDatas(data);
+        return data;
+      })
       .then((response) => console.log(response));
   }, []);
 
-  const rooms = datas.reduce((acc, current) => {
+  const rooms = datas.slice().reduce((acc, current) => {
     const madeRoom = acc.find((room) => room.roomname === current.roomname);
     if (!madeRoom) {
       return acc.concat([current]);
@@ -24,6 +28,7 @@ function App() {
       return acc;
     }
   }, []);
+  console.log(rooms);
 
   return (
     <>

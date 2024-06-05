@@ -1,11 +1,12 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const Room = ({ data }) => {
+const Room = ({ data, datas }) => {
   return (
     <div>
-      <Outlet />
-      <h2>{data.roomname}</h2>
+      <Link to={"/" + data.roomname} state={{ datas }}>
+        {data.roomname}
+      </Link>
     </div>
   );
 };
