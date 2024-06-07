@@ -4,6 +4,8 @@ import RoomList from "./roomList";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Outlet } from "react-router-dom";
+import Nav from "./Nav";
+import LeftSidebar from "./leftSidebar";
 
 function App() {
   const [datas, setDatas] = useState([]);
@@ -51,14 +53,16 @@ function App() {
 
   return (
     <>
-      <Link to="/about">
-        <button>about</button>
-      </Link>
-      <RoomList
-        datas={datas}
-        rooms={rooms}
-        sendMessage={sendMessage}
-      ></RoomList>
+      <LeftSidebar />
+      <div className="wrapper">
+        <Nav />
+        <div className="container">
+          <Link to="/about">
+            <button>about</button>
+          </Link>
+          <RoomList datas={datas} rooms={rooms}></RoomList>
+        </div>
+      </div>
     </>
   );
 }

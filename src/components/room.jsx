@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Room = ({ data, datas, sendMessage }) => {
   return (
-    <div>
+    <div className="room">
       <Link to={"/" + data.roomname} state={{ datas, sendMessage }}>
         {data.roomname}
       </Link>
