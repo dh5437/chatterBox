@@ -3,14 +3,15 @@ import React from "react";
 const Chat = ({ data }) => {
   return (
     <div
+      className="oppositeChat"
       style={{
         display: "flex",
         flexDirection: "row",
-        justifyContent: "space-around",
+        justifyContent: "flex-start",
       }}
     >
-      <div>{data.username}</div>
-      <div>{data.text}</div>
+      <div className="chatUser">{data.username}</div>
+      <div className="chatMessage">{data.text}</div>
     </div>
   );
 };
