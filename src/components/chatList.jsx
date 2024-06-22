@@ -3,10 +3,11 @@ import Chat from "./chat";
 import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const ChatList = () => {
   const location = useLocation();
-  console.log(location.state);
+  const navigate = useNavigate();
   let datas = location.state.datas;
 
   const { roomname } = useParams();
@@ -61,7 +62,12 @@ const ChatList = () => {
   return (
     <div className="chatContainer">
       <div className="roomNav">
-        <span className="material-symbols-outlined" onClick={() => {}}>
+        <span
+          className="material-symbols-outlined"
+          onClick={() => {
+            navigate("/"); // Navigate to the room list
+          }}
+        >
           arrow_back
         </span>
         Room: {roomname}
@@ -76,13 +82,6 @@ const ChatList = () => {
       </div>
       <div className="sendForm">
         <form onSubmit={handleSubmit}>
-          {/* <input
-            className="form-control"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="USERNAME"
-          ></input> */}
           <input
             className="form-control"
             type="text"

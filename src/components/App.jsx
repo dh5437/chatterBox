@@ -9,6 +9,7 @@ import LeftSidebar from "./leftSidebar";
 function App() {
   const [datas, setDatas] = useState([]);
   const [room, setRoom] = useState();
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     axios
@@ -28,18 +29,33 @@ function App() {
     }
     return acc;
   }, []);
-  console.log(rooms);
+
+  const filteredRooms = rooms.filter((room) =>
+    room.roomname.toLowerCase().includes(query.toLowerCase())
+  );
+
+  const handleQueryChange = (e) => {
+    setQuery(e.target.value);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <>
       <LeftSidebar />
       <div className="wrapper">
-        <Nav />
+        <Nav
+          getQuery={handleQueryChange}
+          query={query}
+          onSearch={handleSearch}
+        />
         <div className="container">
           <Link to="/about">
             <button>about</button>
           </Link>
-          <RoomList datas={datas} rooms={rooms}></RoomList>
+          <RoomList datas={datas} rooms={filteredRooms}></RoomList>
         </div>
       </div>
     </>

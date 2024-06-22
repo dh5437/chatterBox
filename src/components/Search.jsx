@@ -1,7 +1,13 @@
-function Search({ getQuery, query, onSubmit }) {
+function Search({ getQuery, query, onSearch }) {
   return (
-    <form className="search-form">
-      <input className="form-control" type="text" />
+    <form className="search-form" onSubmit={onSearch}>
+      <input
+        className="form-control"
+        type="text"
+        value={query}
+        onChange={getQuery}
+        placeholder="Search room"
+      />
       <button className="searchButton" type="submit">
         SEARCH
       </button>
