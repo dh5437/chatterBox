@@ -198,6 +198,7 @@ button {
 .chatList {
   width: 100%;
   height: 750px;
+  max-height: 80vh;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
@@ -208,7 +209,7 @@ button {
 
 .sendForm {
   width: 100%;
-  height: 100px;
+  height: 70px;
   background-color: #f7f3d1;
   display: flex;
   justify-content: center;

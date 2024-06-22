@@ -11,15 +11,19 @@ function App() {
   const [room, setRoom] = useState();
   const [query, setQuery] = useState("");
 
+  const getMessages = async () => {
+    try {
+      const response = await axios.get("https://www.yungooso.com/api/messages");
+      setDatas(response.data);
+    } catch (error) {
+      console.error("Error while getting messages:", error);
+    }
+  };
+
   useEffect(() => {
-    axios
-      .get("https://www.yungooso.com/api/messages")
-      .then(({ data }) => {
-        setDatas(data);
-        return data;
-      })
-      .catch((error) => console.error(error))
-      .then((response) => console.log(response));
+    getMessages();
+    const interval = setInterval(getMessages, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   const rooms = datas.slice().reduce((acc, current) => {

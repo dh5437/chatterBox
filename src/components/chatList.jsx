@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Chat from "./chat";
 import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -17,13 +17,15 @@ const ChatList = () => {
     datas ? datas.filter((data) => data.roomname === roomname) : []
   );
 
+  const chatEndRef = useRef(null);
+
   const RefreshMessage = async () => {
     try {
       const response = await axios.get("https://www.yungooso.com/api/messages");
-      const newChats = response.data.filter(
+      const roomChats = response.data.filter(
         (data) => data.roomname === roomname
       );
-      setChats(newChats);
+      setChats(roomChats);
     } catch (error) {
       console.error("Error fetching chats:", error);
     }
@@ -31,7 +33,13 @@ const ChatList = () => {
 
   useEffect(() => {
     RefreshMessage();
+    const interval = setInterval(RefreshMessage, 1000);
+    return () => clearInterval(interval);
   }, [roomname]);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chats]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,16 +52,9 @@ const ChatList = () => {
     };
 
     try {
-      let response = await axios.post(
-        "https://www.yungooso.com/api/messages",
-        newMessage
-      );
+      await axios.post("https://www.yungooso.com/api/messages", newMessage);
       setText("");
       RefreshMessage();
-
-      const messageId = response.data.id;
-      console.log("Message sent with ID:", messageId);
-      return messageId;
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -78,6 +79,7 @@ const ChatList = () => {
           {chats.map((chat) => (
             <Chat key={chat.id} data={chat} />
           ))}
+          <div ref={chatEndRef} />
         </div>
       </div>
       <div className="sendForm">
