@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Room = ({ data, datas, sendMessage }) => {
+const Room = ({ data, datas }) => {
   return (
     <div className="room">
-      <Link to={"/" + data.roomname} state={{ datas, sendMessage }}>
+      <Link to={`/${data.roomname}`} state={{ datas }}>
         {data.roomname}
       </Link>
     </div>

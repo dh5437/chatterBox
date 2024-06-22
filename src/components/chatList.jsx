@@ -1,29 +1,71 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Chat from "./chat";
 import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import axios from "axios";
 
 const ChatList = () => {
   const location = useLocation();
-  const datas = location.state.datas;
+  console.log(location.state);
+  let datas = location.state.datas;
+
   const { roomname } = useParams();
 
-  const chats = datas.filter((data) => {
-    return data.roomname === roomname;
-  });
-  console.log(chats);
+  const [text, setText] = useState("");
+  const [chats, setChats] = useState(
+    datas ? datas.filter((data) => data.roomname === roomname) : []
+  );
 
-  const sendMessage = location.state.sendMessage;
+  const RefreshMessage = async () => {
+    try {
+      const response = await axios.get("https://www.yungooso.com/api/messages");
+      const newChats = response.data.filter(
+        (data) => data.roomname === roomname
+      );
+      setChats(newChats);
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+    }
+  };
+
+  useEffect(() => {
+    RefreshMessage();
+  }, [roomname]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const newMessage = {
+      username: "sliverstone",
+      roomname: roomname,
+      text: text,
+      date: new Date().toISOString(),
+    };
+
+    try {
+      let response = await axios.post(
+        "https://www.yungooso.com/api/messages",
+        newMessage
+      );
+      setText("");
+      RefreshMessage();
+
+      const messageId = response.data.id;
+      console.log("Message sent with ID:", messageId);
+      return messageId;
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
 
   return (
     <div className="chatContainer">
       <div className="roomNav">
-        <span class="material-symbols-outlined" onClick={() => {}}>
+        <span className="material-symbols-outlined" onClick={() => {}}>
           arrow_back
         </span>
         Room: {roomname}
-        <span class="material-symbols-outlined">menu</span>
+        <span className="material-symbols-outlined">menu</span>
       </div>
       <div className="chatList">
         <div>
@@ -33,11 +75,20 @@ const ChatList = () => {
         </div>
       </div>
       <div className="sendForm">
-        <form>
+        <form onSubmit={handleSubmit}>
+          {/* <input
+            className="form-control"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="USERNAME"
+          ></input> */}
           <input
             className="form-control"
             type="text"
-            // onChange={sendMessage}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="MESSAGE"
           ></input>
           <button>Send</button>
         </form>
